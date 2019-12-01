@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :movimento_estoques
+  resources :operacaos
   resources :produtos
   resources :unidades
   resources :grupo_produtos

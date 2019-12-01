@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_01_211131) do
+ActiveRecord::Schema.define(version: 2019_12_01_213052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,26 @@ ActiveRecord::Schema.define(version: 2019_12_01_211131) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "movimento_estoques", force: :cascade do |t|
+    t.date "data"
+    t.integer "quantidade"
+    t.bigint "pessoa_id"
+    t.bigint "operacao_id"
+    t.bigint "produto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["operacao_id"], name: "index_movimento_estoques_on_operacao_id"
+    t.index ["pessoa_id"], name: "index_movimento_estoques_on_pessoa_id"
+    t.index ["produto_id"], name: "index_movimento_estoques_on_produto_id"
+  end
+
+  create_table "operacaos", force: :cascade do |t|
+    t.string "descricao"
+    t.integer "tipo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pessoas", force: :cascade do |t|
     t.string "nome"
     t.string "documento"
@@ -71,6 +91,9 @@ ActiveRecord::Schema.define(version: 2019_12_01_211131) do
 
   add_foreign_key "cidades", "estados"
   add_foreign_key "enderecos", "cidades"
+  add_foreign_key "movimento_estoques", "operacaos"
+  add_foreign_key "movimento_estoques", "pessoas"
+  add_foreign_key "movimento_estoques", "produtos"
   add_foreign_key "pessoas", "enderecos"
   add_foreign_key "produtos", "grupo_produtos"
   add_foreign_key "produtos", "unidades"
