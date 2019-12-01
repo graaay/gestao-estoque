@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_01_201522) do
+ActiveRecord::Schema.define(version: 2019_12_01_211131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,11 +23,55 @@ ActiveRecord::Schema.define(version: 2019_12_01_201522) do
     t.index ["estado_id"], name: "index_cidades_on_estado_id"
   end
 
+  create_table "enderecos", force: :cascade do |t|
+    t.string "cep"
+    t.bigint "cidade_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cidade_id"], name: "index_enderecos_on_cidade_id"
+  end
+
   create_table "estados", force: :cascade do |t|
     t.string "uf"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "grupo_produtos", force: :cascade do |t|
+    t.string "nome"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pessoas", force: :cascade do |t|
+    t.string "nome"
+    t.string "documento"
+    t.bigint "endereco_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["endereco_id"], name: "index_pessoas_on_endereco_id"
+  end
+
+  create_table "produtos", force: :cascade do |t|
+    t.string "nome"
+    t.bigint "unidade_id"
+    t.bigint "grupo_produto_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grupo_produto_id"], name: "index_produtos_on_grupo_produto_id"
+    t.index ["unidade_id"], name: "index_produtos_on_unidade_id"
+  end
+
+  create_table "unidades", force: :cascade do |t|
+    t.string "descricao"
+    t.string "sigla"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "cidades", "estados"
+  add_foreign_key "enderecos", "cidades"
+  add_foreign_key "pessoas", "enderecos"
+  add_foreign_key "produtos", "grupo_produtos"
+  add_foreign_key "produtos", "unidades"
 end
